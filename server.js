@@ -40,19 +40,14 @@ http
       } else if (url == "/newsletter_signup" && method == "GET") {
         console.log("We got this far");
         //send back the form html to the client
-        let test = fs.readFile("./form.html", (err, content) => {
-          if (err) {
-            console.log("err happened");
-            console.error(err);
-            statusCode = 500;
-            resBody = "<h1>Server Error. Try again later.</h1>";
-          } else {
-            console.log("content", content);
-            resBody = content; //do we need to convert it to string?
-          }
-          return resBody;
-        });
-        console.log("botttom of if, made it", test);
+
+        try {
+          resBody = fs.readFileSync("./form.html").toString();
+        } catch (err) {
+          console.error(err);
+          statusCode = 500;
+          resBody = "<h1>Server Error. Try again later.</h1>";
+        }
       } else if (url == "/newsletter_signup" && method == "POST") {
         try {
           //decode the chunks array
@@ -71,17 +66,10 @@ http
         statusCode = 404;
         resBody = "<h1> Error. Page Not Found</h1>";
       }
-      console.log("test1----");
       res.statusCode = statusCode;
-      console.log("test2----");
       res.setHeader("content-type", contentType);
-      console.log("test3----");
-
-      console.log(`Resbody ::`, resBody);
       res.write(resBody);
-      console.log("test4----");
       res.end();
-      console.log("test5----");
     });
   })
   .listen(port, () => {
