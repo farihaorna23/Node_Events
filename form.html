@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>NewsLetter Form</h1>
+    <p class="message"></p>
+    <form>
+      <label for="name">Name:</label><br />
+      <input type="text" id="name" name="name" /><br />
+      <label for="lname">Email:</label><br />
+      <input type="text" id="email" name="email" />
+      <div>
+        <button type="submit">Submit Button</button>
+      </div>
+    </form>
+    <script>
+      let form = document.querySelector("form");
+      let name = document.querySelector("#name");
+      let email = document.querySelector("#email");
+      let message = document.querySelector(".message");
+
+      form.addEventListener("submit", e => {
+        e.preventDefault();
+        message.textContent = "";
+        //after the form has been submitted, send the form information as JSON request body to the server
+        //listen for response
+        //JSON.stringify() static method converts a JavaScript value to a JSON string
+        fetch("/newsletter_signup", {
+          method: "POST",
+          body: JSON.stringify({ name: name.value, email: email.value })
+        })
+          .then(res => res.json())
+          .then(data => {
+            //clear input values
+            name.value = "";
+            email.value = "";
+            message.textContent = data.msg;
+          })
+          .catch(err => {
+            console.error(err);
+            message.textContent = "Error. Unable to Sign Up";
+          });
+      });
+    </script>
+  </body>
+</html>
