@@ -2,9 +2,21 @@
 // must read and decode the request body (which will contain a name and email), and append the contact information to a csv file (your newsletter list)
 const { EventEmitter } = require("events");
 const http = require("http");
+const fs = require("fs");
 //creating a new EventEmitter instance called NewsLetter
 const NewsLetter = new EventEmitter();
 const port = 3000;
+
+NewsLetter.on("signup", contact => {
+  //appendFile will create a file if a file doesn't exist
+  fs.appendFile("contact.csv", `${contact.name} ${contact.email}\n`, err => {
+    if (err) {
+      console.error(err);
+    } else {
+      console.log("Successfully added content");
+    }
+  });
+});
 
 http
   .createServer((req, res) => {
