@@ -29,7 +29,6 @@ http
     ////listenng for the end event
     req.on("end", () => {
       const { url, method } = req;
-      console.log(method, url, "-----------------------------------------");
       let statusCode = 200;
       let contentType = "text/html";
       let errorMessage = "";
@@ -38,9 +37,9 @@ http
       if (url == "/" && method == "GET") {
         resBody = "<h1>Home Page</h1>";
       } else if (url == "/newsletter_signup" && method == "GET") {
-        console.log("We got this far");
         //send back the form html to the client
-
+        //readFile is asyncronus-> meaing it will jump to the codes that is after the if statement and will try to access resbody when it doesn't have any result yet -> givinig it an error
+        //use readFileSync which is syncronus and it will return the content of the file in buffer, so covert it into string
         try {
           resBody = fs.readFileSync("./form.html").toString();
         } catch (err) {
@@ -51,6 +50,7 @@ http
       } else if (url == "/newsletter_signup" && method == "POST") {
         try {
           //decode the chunks array
+          //buffer needs to be converted to string
           let body = Buffer.concat(chunks).toString();
           //to access the request body values
           info = JSON.parse(body);

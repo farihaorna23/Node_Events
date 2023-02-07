@@ -34,12 +34,20 @@
           method: "POST",
           body: JSON.stringify({ name: name.value, email: email.value })
         })
-          .then(res => res.json())
-          .then(data => {
+          .then(res => {
+            //The json() method of the Response interface takes a Response stream and reads it to completion. It returns a promise which resolves with the result of parsing the body text as JSON.
+            res.json();
             //clear input values
+            // console.log(res);
+            // name.value = "";
+            // email.value = "";
+            // message.textContent = JSON.stringify(res);
+          })
+          .then(data => {
+            console.log(data);
             name.value = "";
             email.value = "";
-            message.textContent = data.msg;
+            message.textContent = JSON.stringify(data);
           })
           .catch(err => {
             console.error(err);
