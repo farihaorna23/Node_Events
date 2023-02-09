@@ -36,18 +36,15 @@
         })
           .then(res => {
             //The json() method of the Response interface takes a Response stream and reads it to completion. It returns a promise which resolves with the result of parsing the body text as JSON.
-            res.json();
-            //clear input values
-            // console.log(res);
-            // name.value = "";
-            // email.value = "";
-            // message.textContent = JSON.stringify(res);
+            console.log(res);
+            res.text();
           })
           .then(data => {
             console.log(data);
             name.value = "";
             email.value = "";
-            message.textContent = JSON.stringify(data);
+            message.innerHTML = data;
+            message.textContent = "Thank You For Sigining up!";
           })
           .catch(err => {
             console.error(err);
